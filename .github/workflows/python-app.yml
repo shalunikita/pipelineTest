@@ -53,5 +53,27 @@ jobs:
        docker build -t gcr.io/***/dockerImage:latest .
        docker push gcr.io/***/dockerImage:latest
        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+       gcloud config set run/region asia-south2-c
+       gcloud run deploy pipeLineTestApi --image gcr.io/***/dockerImage:latest --platform managed
+
+    - name: Build and Push Docker Image to GCR
+      run: |
+       echo "${{ secrets.GCP_SA_KEY }}" > key.json
+       docker login -u _json_key --password-stdin gcr.io < key.json
+       docker build -t gcr.io/***/dockerImage:latest .
+       docker push gcr.io/***/dockerImage:latest
+       gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
        gcloud config set run/region us-central1
        gcloud run deploy pipeLineTestApi --image gcr.io/***/dockerImage:latest --platform managed
+      env:
+       pythonLocation: /opt/hostedtoolcache/Python/3.10.13/x64
+       LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.13/x64/lib
+       CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
+       GOOGLE_APPLICATION_CREDENTIALS: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
+       GOOGLE_GHA_CREDS_PATH: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
+       CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+       CLOUDSDK_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+       GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+       GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+       GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+     
