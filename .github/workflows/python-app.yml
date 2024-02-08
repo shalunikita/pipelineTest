@@ -49,6 +49,6 @@ jobs:
 
     - name: Build and Push Docker Image to GCR
       run: |
-        echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin gcr.io
+       echo "${{ secrets.GCP_SA_KEY }}" | docker login -u _json_key --password-stdin gcr.io
         docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/dockerImage:latest .
         docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/dockerImage:latestplatform managed    
