@@ -58,7 +58,7 @@ jobs:
 
     - name: Build and Push Docker Image to GCR
       run: |
-       echo "${{ secrets.GCP_SA_KEY }}" > key.json
+       echo -n "${{ secrets.GCP_SA_KEY }}" > key.json
        docker login -u _json_key --password-stdin gcr.io < key.json
        docker build -t gcr.io/***/dockerImage:latest .
        docker push gcr.io/***/dockerImage:latest
@@ -76,4 +76,11 @@ jobs:
        GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
        GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
        GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-     
+    # Cleanup steps after the main run
+    - name: Cleanup on Success
+      if: success()
+      run: rm -f key.json
+
+    - name: Cleanup on Failure
+      if: failure()
+      run: rm -f key.json
