@@ -16,6 +16,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: demoImage
 
     steps:
     - uses: actions/checkout@v3
@@ -47,33 +49,6 @@ jobs:
        export_environment_variables: true
        id_token_audience: ${{ secrets.GCP_PROJECT_ID }}
 
-    
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:latest . 
 
-    - name: Build and Push Docker Image to GCR
-      run: |
-       echo -n "${{ secrets.GCP_SA_KEY }}" > key.json
-       docker login -u _json_key --password-stdin gcr.io < key.json
-       docker build -t gcr.io/***/dockerImage:latest .
-       docker push gcr.io/***/dockerImage:latest
-       gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-       gcloud config set run/region us-central1
-       gcloud run deploy pipeLineTestApi --image gcr.io/***/dockerImage:latest --platform managed
-      env:
-       pythonLocation: /opt/hostedtoolcache/Python/3.10.13/x64
-       LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.13/x64/lib
-       CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
-       GOOGLE_APPLICATION_CREDENTIALS: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
-       GOOGLE_GHA_CREDS_PATH: /home/runner/work/pipelineTest/pipelineTest/gha-creds-eb803bbc9b6596ef.json
-       CLOUDSDK_CORE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-       CLOUDSDK_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-       GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-       GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-       GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-    # Cleanup steps after the main run
-    - name: Cleanup on Success
-      if: success()
-      run: rm -f key.json
-
-    - name: Cleanup on Failure
-      if: failure()
-      run: rm -f key.json
