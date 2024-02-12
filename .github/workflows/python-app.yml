@@ -76,4 +76,4 @@ jobs:
         gcloud run deploy pipelinetesting \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/demoimage:latest \
           --platform managed \
-          --region asia-south2-b
+          --region us-west2
