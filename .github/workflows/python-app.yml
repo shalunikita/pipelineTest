@@ -77,4 +77,4 @@ jobs:
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/demoimage:latest \
           --platform managed \
           --region us-west2  \
-          --service-account=my-cloud-run-service-account@leafy-antonym-413607.iam.gserviceaccount.com
+          --service-account my-cloud-run-service-account@leafy-antonym-413607.iam.gserviceaccount.com
