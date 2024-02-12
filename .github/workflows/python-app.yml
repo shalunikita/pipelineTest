@@ -49,5 +49,6 @@ jobs:
        export_environment_variables: true
        id_token_audience: ${{ secrets.GCP_PROJECT_ID }}
 
-   
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:latest . 
 
