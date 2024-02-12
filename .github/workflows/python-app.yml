@@ -76,4 +76,5 @@ jobs:
         gcloud run deploy pipelinetesting \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/demoimage:latest \
           --platform managed \
-          --region us-west2
+          --region us-west2  \
+          --service-account=my-cloud-run-service-account@leafy-antonym-413607.iam.gserviceaccount.com
