@@ -5,7 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
  
 # Copy the contents of the current directory to the container at /app
-COPY . /app
+COPY src /app
  
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
@@ -17,4 +17,5 @@ EXPOSE 80
 ENV NAME World
  
 # Run app.py when the container launches
-CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["python", "-m", "src.app", "run", "--host=0.0.0.0"]
+
