@@ -5,7 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
  
 # Copy the contents of the current directory to the container at /app
-COPY src /app
+COPY src/app
  
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
